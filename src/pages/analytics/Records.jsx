@@ -1,9 +1,4 @@
-import {
-  faCircleXmark,
-  faIdBadge,
-  faRotate,
-  faRotateLeft,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './RecordsCSS.css';
@@ -14,8 +9,6 @@ function Records() {
     return stored ? JSON.parse(stored) : [];
   });
 
-  const [studID, setStudID] = useState('');
-  const [studName, setStudName] = useState('');
   const [ids, setIds] = useState(() => {
     const stored = localStorage.getItem('StudentList');
     return stored ? JSON.parse(stored) : [];
@@ -74,9 +67,14 @@ function Records() {
     localStorage.setItem('StudentList', JSON.stringify(ids));
   }, [ids]);
 
+  /*
+  const [studID, setStudID] = useState('');
+  const [studName, setStudName] = useState('');
+  
   const newStudent = () => {
     setIds([...ids, { studentID: studID, studentName: studName }]);
   };
+  */
 
   // for filtering
   const filteredAttendance = attendance
@@ -114,6 +112,7 @@ function Records() {
     </div>
   ));
 
+  /*
   const students_mapped = ids.map((stud, index) => (
     <div key={index} className="record-item">
       <h2>
@@ -122,6 +121,7 @@ function Records() {
       <p>{stud.studentName}</p>
     </div>
   ));
+*/
 
   return (
     <div className="record-overall-container">

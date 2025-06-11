@@ -4,31 +4,30 @@ import { useEffect, useState, useRef } from 'react';
 import './ClockInCSS.css';
 
 function ClockIn() {
-  const [count, setCount] = useState(0);
   const [scannedID, setScannedID] = useState('');
   const [animate, setAnimate] = useState(false);
   const inputRef = useRef(null);
 
-const [ids, setIds] = useState(() => {
-  const stored = localStorage.getItem("idLogs");
-  return stored ? JSON.parse(stored) : [];
-});
- // Load from localStorage on first render
-useEffect(() => {
-  const stored = localStorage.getItem("idLogs");
-  if (stored) {
-    try {
-      setIds(JSON.parse(stored));
-    } catch (e) {
-      console.error("Failed to parse localStorage:", e);
-      setIds([]);
+  const [ids, setIds] = useState(() => {
+    const stored = localStorage.getItem('idLogs');
+    return stored ? JSON.parse(stored) : [];
+  });
+  // Load from localStorage on first render
+  useEffect(() => {
+    const stored = localStorage.getItem('idLogs');
+    if (stored) {
+      try {
+        setIds(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to parse localStorage:', e);
+        setIds([]);
+      }
     }
-  }
-}, []);
+  }, []);
 
-useEffect(() => {
-  localStorage.setItem('idLogs', JSON.stringify(ids));
-}, [ids]);
+  useEffect(() => {
+    localStorage.setItem('idLogs', JSON.stringify(ids));
+  }, [ids]);
 
   useEffect(() => {
     const focusInput = () => {
@@ -65,10 +64,13 @@ useEffect(() => {
       // Trigger animation
       setAnimate(true);
 
-      let attendant = localStorage.getItem('User')
+      let attendant = localStorage.getItem('User');
 
       setTimeout(() => setAnimate(false), 1000);
-      setIds([...ids, { category: 'Clock In', id: scannedID, time: timeIn, user: attendant }]);
+      setIds([
+        ...ids,
+        { category: 'Clock In', id: scannedID, time: timeIn, user: attendant },
+      ]);
 
       setScannedID('');
     }
@@ -84,13 +86,12 @@ useEffect(() => {
 
   return (
     <div>
-        <a href='/'>
-            <FontAwesomeIcon
-                icon={faCircleXmark}
-                className='close'
-            />
-        </a>
-      <h1>Tap your ID to <span style={{color:'#f16522'}}>Clock In</span>!</h1>
+      <a href="/">
+        <FontAwesomeIcon icon={faCircleXmark} className="close" />
+      </a>
+      <h1>
+        Tap your ID to <span style={{ color: '#f16522' }}>Clock In</span>!
+      </h1>
       {/*<button onClick={() => logs()}>view logs</button>*/}
       <div className="card">
         <input

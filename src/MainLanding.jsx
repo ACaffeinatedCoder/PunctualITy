@@ -10,22 +10,21 @@ import RequestAccess from './pages/RequestAccess';
  *   #f16522 #f6941d #020202
  */
 export default function MainLandingPage() {
-  const [rec, setRec] = useState(true)
-  const [user, setUser] = useState(localStorage.getItem('User'))
+  const [rec, setRec] = useState(true);
+  const [user, setUser] = useState(localStorage.getItem('User'));
 
   useEffect(() => {
     //check if 'User' is empty
-    localStorage.setItem('User', user)
+    localStorage.setItem('User', user);
 
     if (localStorage.getItem('User') === '') {
       // no User, open the login page
-      setRec(true)
+      setRec(true);
     } else {
       // User detected, do not render the login page
-      setRec(false)
+      setRec(false);
     }
-
-  })
+  });
 
   /*
   useEffect(() => {
@@ -73,42 +72,51 @@ export default function MainLandingPage() {
             flexDirection: 'column',
           }}>
           <h1>
-            Punctual<a href='/records'><span style={{ color: '#f16522' }}>IT</span></a>y
+            Punctual
+            <a href="/records">
+              <span style={{ color: '#f16522' }}>IT</span>
+            </a>
+            y
           </h1>
           <h3 style={{ paddingBottom: '10%' }}>
-            by <i
+            by{' '}
+            <i
               onClick={() => {
-                setUser('')
-                localStorage.setItem('User', '')
-              }}
-            >acaffeinatedcoder</i>
+                setUser('');
+                localStorage.setItem('User', '');
+              }}>
+              acaffeinatedcoder
+            </i>
           </h3>
         </div>
         <div className="card">
           <p>How are you clocking?</p>
           <div className="clocking-in">
             <div className="clock">
-              <a href='/clockin'>
+              <a href="/clockin">
                 <h2>CLOCK IN</h2>
                 <FontAwesomeIcon icon={faClock} className="clock-icon" />
               </a>
             </div>
             <div className="clock">
-              <a href='/clockout'>
+              <a href="/clockout">
                 <h2>CLOCK OUT</h2>
-                <FontAwesomeIcon icon={faPersonRunning} className="clock-icon" />                
+                <FontAwesomeIcon
+                  icon={faPersonRunning}
+                  className="clock-icon"
+                />
               </a>
-
             </div>
           </div>
         </div>
       </div>
-        <p className="read-the-docs">
-          This website was developed by Mr. Francisco for the Siena College of
-          Taytay's College of Engineering and Information Technology Department.
-        </p>
+      <p className="read-the-docs">
+        This website was developed by Mr. Francisco for the Siena College of
+        Taytay's College of Engineering and Information Technology Department.
+      </p>
       {rec && (
-          <div style={{
+        <div
+          style={{
             position: 'fixed',
             top: 0,
             left: 0,
@@ -120,12 +128,9 @@ export default function MainLandingPage() {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-            <RequestAccess
-              panel={setRec}
-              attendee={setUser}
-            />
-          </div>
-        )}
+          <RequestAccess panel={setRec} attendee={setUser} />
+        </div>
+      )}
     </div>
   );
 }

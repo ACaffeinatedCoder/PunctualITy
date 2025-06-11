@@ -1,20 +1,20 @@
-import { faCircleXmark, faIdBadge, faLock, faLockOpen, faUnlock } from '@fortawesome/free-solid-svg-icons';
+import {
+  faLock,
+  faLockOpen,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './AccessCSS.css';
 
-function RequestAccess({panel, attendee}) {
-
-    const [access, setAccess] = useState(true);
-    const [email, setEmail] = useState('');
-
-    const reqAccess = () => {
-        setAccess(!access)
-    }
+function RequestAccess({ panel, attendee }) {
+  const [access, setAccess] = useState(true);
+  const [email, setEmail] = useState('');
 
   return (
-    <div className='access'>
-      <h1>Enter your <span style={{color:'#f16522'}}>Credentials</span>.</h1>
+    <div className="access">
+      <h1>
+        Enter your <span style={{ color: '#f16522' }}>Credentials</span>.
+      </h1>
       {/*<button onClick={() => logs()}>view logs</button>*/}
       <div className="card">
         <FontAwesomeIcon
@@ -24,17 +24,14 @@ function RequestAccess({panel, attendee}) {
             attendee(email);
             panel(false);
           }}
-        />     
+        />
       </div>
-      <div className='credentials'>
+      <div className="credentials">
         <input
           onChange={(e) => setEmail(e.target.value)}
-          placeholder='Email...'
+          placeholder="Email..."
         />
-        <input
-          type='password'
-          placeholder='Password...'
-        />
+        <input type="password" placeholder="Password..." />
       </div>
       <p className="read-the-docs">
         Don't have access? Make a request for access with your Chairperson.
