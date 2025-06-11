@@ -1,0 +1,75 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.access-container {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  background-color: #888;
+}
+
+.access {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-top: 1%;
+  padding-bottom: 7%;
+  margin: 1%;
+  height: 55%;
+  width: 45%;
+  background-color: #202124 ;
+  border-radius: 15px;
+  transition: color 0.3s ease, font-size 0.3s ease;
+  font-size: 1vw;
+    position: relative; /* Needed for absolute child */
+}
+
+.credentials {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-items: center;
+    align-self: center;
+}
+
+.credentials input {
+    width: 70%;
+    font-size: 1.75vw;
+    margin: 0.25%;
+}
+
+.lock-icon {
+  font-size: 5vw;
+  color: #f6941d;
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 3vw;
+  color: #f6941d;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  z-index: 1000;
+}

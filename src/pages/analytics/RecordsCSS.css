@@ -1,0 +1,158 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.record-overall-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: hidden;
+    z-index: 999;
+}
+
+.record-header {
+  position: sticky;
+  top: 0;
+  width: 90%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1000;
+  border-radius: 15px;
+}
+
+.close-records {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: #f16522;
+  cursor: pointer;
+}
+
+.record-container {
+  margin-top: 1rem;
+  background-color: #202124;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.records {
+  height: 65vh;
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.record-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #202124;
+  padding: 0.75rem 1rem;
+  flex: 1;
+  margin: 0;
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  text-align: left;
+}
+
+.record-title h2 {
+  margin: 0;
+  flex: 1;
+}
+
+.record-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #202124;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  text-align: left;
+}
+
+.record-item:hover {
+    background-color: #57575a;
+}
+
+.record-item h1,
+.record-item p {
+  margin: 0;
+  flex: 1;
+}
+
+.record-item h1 {
+  text-align: left;
+}
+
+.record-item p:nth-of-type(1) {
+  text-align: center;
+}
+
+.record-item p:nth-of-type(2) {
+  text-align: right;
+}
+
+.record-item p:nth-of-type(3) {
+  text-align: center;
+}
+
+
+/*
+.record-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #202124;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  text-align: left;
+}
+
+.record-item h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.record-item p {
+  margin: 0;
+  font-size: 1rem;
+}
+  */
+
+
+.read-the-docs {
+  color: rgb(68, 68, 68);
+}
