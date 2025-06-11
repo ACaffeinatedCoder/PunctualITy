@@ -9,7 +9,7 @@ import ClockOut from './pages/ClockOUT'
 import Records from './pages/analytics/Records'
 
 /**
- * Filter Records, Sort Records
+ * Filter Records, Sort Records*
  * Analytics Page
  * -- Compare IDs with Names
  * -- Compare Records with Events
@@ -17,13 +17,11 @@ import Records from './pages/analytics/Records'
  * --- Incomplete Clocking: Time-In Only or Time-Out Only
  * --- Incomplete Clocking for Event
  * Authentication
- * -- Match Credentials with Records
- * -- Per Clocking, log Credentials as well
+ * -- Match Credentials with Records *
+ * -- Per Clocking, log Credentials as well *
  */
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Routes>
       <Route path="/" element={<MainLandingPage/>}/>

@@ -10,18 +10,52 @@ import RequestAccess from './pages/RequestAccess';
  *   #f16522 #f6941d #020202
  */
 export default function MainLandingPage() {
-  const [count, setCount] = useState(0);
-  const [rec, setRec] = useState(false)
-  const [user, setUser] = useState('Casey')
+  const [rec, setRec] = useState(true)
+  const [user, setUser] = useState(localStorage.getItem('User'))
 
-  const recordsAccess = () => {
-    console.log('Requesting access to records...')
-  }
+  useEffect(() => {
+    //check if 'User' is empty
+    localStorage.setItem('User', user)
+
+    if (localStorage.getItem('User') === '') {
+      // no User, open the login page
+      setRec(true)
+    } else {
+      // User detected, do not render the login page
+      setRec(false)
+    }
+
+  })
+
+  /*
+  useEffect(() => {
+    console.log('I\'m rendered 13')
+
+    if (localStorage.getItem('logged') === false) {
+      console.log('you are logged OUT')
+      setRec(true)
+    } else {
+      console.log('you are logged IN')
+      setRec(false)
+    }
+  })
 
   useEffect(() => {
     // Mock Credential
+    if (user !== '') {
+      console.log('CREDS logged IN')
+      localStorage.setItem('logged', true)
+      setRec(false)
+    } else if (user === ''){
+      console.log('CREDS logged OUT')
+      localStorage.setItem('logged', false)
+      setRec(true)
+    }
+
     localStorage.setItem('User', user)
-  }, [])
+    console.log(localStorage.getItem('User'))
+  }, [user])
+  */
 
   return (
     <div>
@@ -39,10 +73,15 @@ export default function MainLandingPage() {
             flexDirection: 'column',
           }}>
           <h1>
-            Punctual<span style={{ color: '#f16522' }} onClick={() => setRec(!rec)}>IT</span>y
+            Punctual<a href='/records'><span style={{ color: '#f16522' }}>IT</span></a>y
           </h1>
           <h3 style={{ paddingBottom: '10%' }}>
-            by <i>acaffeinatedcoder</i>
+            by <i
+              onClick={() => {
+                setUser('')
+                localStorage.setItem('User', '')
+              }}
+            >acaffeinatedcoder</i>
           </h3>
         </div>
         <div className="card">
@@ -63,11 +102,11 @@ export default function MainLandingPage() {
             </div>
           </div>
         </div>
+      </div>
         <p className="read-the-docs">
           This website was developed by Mr. Francisco for the Siena College of
           Taytay's College of Engineering and Information Technology Department.
         </p>
-      </div>
       {rec && (
           <div style={{
             position: 'fixed',
@@ -83,6 +122,7 @@ export default function MainLandingPage() {
           }}>
             <RequestAccess
               panel={setRec}
+              attendee={setUser}
             />
           </div>
         )}

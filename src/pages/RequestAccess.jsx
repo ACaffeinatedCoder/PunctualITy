@@ -3,39 +3,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './AccessCSS.css';
 
-function RequestAccess({panel}) {
+function RequestAccess({panel, attendee}) {
 
     const [access, setAccess] = useState(true);
+    const [email, setEmail] = useState('');
+
     const reqAccess = () => {
         setAccess(!access)
     }
 
   return (
     <div className='access'>
-        <FontAwesomeIcon
-            icon={faCircleXmark}
-            className='close'
-            onClick={() => panel(false)}
-        />
       <h1>Enter your <span style={{color:'#f16522'}}>Credentials</span>.</h1>
       {/*<button onClick={() => logs()}>view logs</button>*/}
       <div className="card">
-        <a href='/records'>
-            <FontAwesomeIcon
-                icon={access ? faLock : faLockOpen}
-                className={`lock-icon ${access ? 'fade-out' : 'fade-in'}`}
-                onClick={() => reqAccess()}
-            />     
-        </a>
-
+        <FontAwesomeIcon
+          icon={access ? faLock : faLockOpen}
+          className={`lock-icon ${access ? 'fade-out' : 'fade-in'}`}
+          onClick={() => {
+            attendee(email);
+            panel(false);
+          }}
+        />     
       </div>
       <div className='credentials'>
         <input
-            placeholder='Email...'
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder='Email...'
         />
         <input
-            type='password'
-            placeholder='Password...'
+          type='password'
+          placeholder='Password...'
         />
       </div>
       <p className="read-the-docs">
