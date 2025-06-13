@@ -2,7 +2,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import MainLandingPage from './MainLanding';
 import ClockIn from './pages/ClockIn';
-import ClockOut from './pages/ClockOUT';
+import ClockOut from './pages/ClockOut';
 import Records from './pages/analytics/Records';
 
 /**
@@ -16,7 +16,7 @@ import Records from './pages/analytics/Records';
  * 
  * Analysis:
  *    Records of Tardiness
- *    Records of Absences
+ *    Records of Absences *
  *    Did the student stay for the event?
  * 
  * Authentication

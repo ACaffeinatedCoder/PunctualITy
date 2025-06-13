@@ -2,32 +2,13 @@ import { faCircleXmark, faIdBadge } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './ClockInCSS.css';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../config/firebase-config';
 
 function ClockOut() {
   const [scannedID, setScannedID] = useState('');
   const [animate, setAnimate] = useState(false);
   const inputRef = useRef(null);
-
-  const [ids, setIds] = useState(() => {
-    const stored = localStorage.getItem('idLogs');
-    return stored ? JSON.parse(stored) : [];
-  });
-  // Load from localStorage on first render
-  useEffect(() => {
-    const stored = localStorage.getItem('idLogs');
-    if (stored) {
-      try {
-        setIds(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse localStorage:', e);
-        setIds([]);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('idLogs', JSON.stringify(ids));
-  }, [ids]);
 
   useEffect(() => {
     const focusInput = () => {
@@ -46,42 +27,39 @@ function ClockOut() {
     };
   }, []);
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && scannedID != '') {
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter' && scannedID !== '') {
       let currentTime = new Date();
       e.preventDefault();
 
-      const timeIn = currentTime.toLocaleString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-        hour12: false,
-      });
+      const dateIn = currentTime.toISOString().split('T')[0];
+      const timeIn = currentTime.toTimeString().split(' ')[0];
 
-      // Trigger animation
+      const logID = `${scannedID}_${Date.now()}`;
+
       setAnimate(true);
 
       let attendant = localStorage.getItem('User');
 
-      setTimeout(() => setAnimate(false), 1000);
-      setIds([
-        ...ids,
-        { category: 'Clock Out', id: scannedID, time: timeIn, user: attendant },
-      ]);
+      const newRecord = {
+        category: 'Clock Out',
+        studentId: scannedID,
+        date: dateIn,
+        time: timeIn,
+        user: attendant,
+      };
 
+      try {
+        const collectionRef = collection(db, 'Attendance-Records');
+        const documentRef = doc(collectionRef, logID);
+        await setDoc(documentRef, newRecord);
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
+
+      setTimeout(() => setAnimate(false), 1000);
       setScannedID('');
     }
-  };
-
-  const logs = () => {
-    console.log('From idLogs:');
-    console.log(
-      'From idLogs:' +
-        JSON.stringify(JSON.parse(localStorage.getItem('idLogs')), null, 2)
-    );
   };
 
   return (
@@ -92,7 +70,6 @@ function ClockOut() {
       <h1>
         Tap your ID to <span style={{ color: '#f16522' }}>Clock Out</span>!
       </h1>
-      {/*<button onClick={() => logs()}>view logs</button>*/}
       <div className="card">
         <input
           ref={inputRef}

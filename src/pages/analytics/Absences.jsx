@@ -1,72 +1,102 @@
 import {
-  faCalendarDays,
-  faCircleExclamation,
   faCircleXmark,
-  faPersonCircleExclamation,
-  faPersonCircleQuestion,
+  faMagnifyingGlass,
   faRotate,
-  faUserXmark
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import './AbsencesCSS.css';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../../config/firebase-config';
 
 function Absences({ absent }) {
-  const [attendance, setAttendance] = useState(() => {
-    const stored = localStorage.getItem('idLogs');
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  const [ids, setIds] = useState(() => {
-    const stored = localStorage.getItem('StudentList');
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [attendance, setAttendance] = useState([]);
+  const getRecords = async () => {
+    const recordCollection = collection(db, 'Attendance-Records');
+    const q = query(recordCollection);
+    try {
+      const recordsRaw = await getDocs(q);
+      const records = recordsRaw.docs.map((rec) => ({
+        ...rec.data(),
+        id: rec.id,
+      }));
+      setAttendance(records);
+    } catch (error) {
+      console.log('Error', err);
+    }
+  };
 
   const [datesOfAbsences, setDates] = useState([]);
 
   const [selectedID, setSelectedID] = useState('');
-  const [studDrop, setStudDrop] = useState([]);
-  const [studentDetails, setStudentDetails] = useState({ studentID: '', studentName: '' });
+  const [students, setStudents] = useState([]);
+  const [studentDetails, setStudentDetails] = useState({
+    studentID: '',
+    studentFName: '',
+    studentLName: '',
+  });
 
-  // Get student details when selectedID changes
-  useEffect(() => {
-    const foundStudent = ids.find((stud) => stud.studentID === selectedID);
-    if (foundStudent) {
-      setStudentDetails(foundStudent);
-    } else {
-      setStudentDetails({ studentID: '', studentName: '' });
+  const getStudents = async () => {
+    const recordCollection = collection(db, 'Student-Information');
+    const q = query(recordCollection);
+    try {
+      const recordsRaw = await getDocs(q);
+      const records = recordsRaw.docs.map((rec) => ({
+        ...rec.data(),
+        id: rec.id,
+      }));
+      setStudents(records);
+    } catch (error) {
+      console.log('Error', err);
     }
-  }, [selectedID, ids]);
+  };
 
-  // Set dropdown values for student IDs
   useEffect(() => {
-    const extracted = ids.map((item) => item.studentID);
-    setStudDrop(extracted);
-  }, [ids]);
+    getRecords();
+    getStudents();
+  }, []);
 
-  // Compute dates of absence when selectedID or attendance changes
+  const [foundID, setFoundID] = useState(false);
+
   useEffect(() => {
-    if (selectedID !== '') {
+    const foundStudent = students.find((stud) => stud.id === selectedID);
+    if (foundStudent) {
+      setStudentDetails({
+        studentID: foundStudent.id,
+        studentFName: foundStudent.firstname,
+        studentLName: foundStudent.lastname,
+      });
+      setFoundID(true);
+    } else {
+      setStudentDetails({ studentID: '', studentFName: '', studentLName: '' });
+      setFoundID(false);
+    }
+  }, [selectedID, students]);
+
+  useEffect(() => {
+    if (selectedID !== '' && foundID === true) {
       const allDates = [
         ...new Set(
-          attendance
-            .map((item) => item.time.split(',')[0].trim())
-            .filter((date) => date !== '')
+          attendance.map((item) => item.date).filter((date) => date !== '')
         ),
       ];
 
       const presentDates = [
         ...new Set(
           attendance
-            .filter((item) => item.id === selectedID)
-            .map((item) => item.time.split(',')[0].trim())
+            .filter((item) => item.studentId === selectedID)
+            .map((item) => item.date)
         ),
       ];
 
-      const absentDates = allDates.filter((date) => !presentDates.includes(date));
+      const absentDates = allDates.filter(
+        (date) => !presentDates.includes(date)
+      );
       setDates(absentDates);
+    } else {
+      setDates([]);
     }
-  }, [selectedID, attendance]);
+  }, [selectedID, foundID]);
 
   const clearFilters = () => {
     setSelectedID('');
@@ -95,25 +125,28 @@ function Absences({ absent }) {
       <div className="absence-and-analytics">
         <div className="id-container">
           <div className="absence-title">
-            <select
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="record-search-icon"
+            />
+            <input
               value={selectedID}
+              placeholder="Student ID..."
               onChange={(e) => setSelectedID(e.target.value)}
-            >
-              <option value="" disabled>
-                Select ID
-              </option>
-              {studDrop.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+            />
             <FontAwesomeIcon icon={faRotate} onClick={clearFilters} />
           </div>
-          <h2><span style={{ color: '#f16522' }}>STUDENT</span> DETAILS</h2>
-          <div className='student-details'>
-            <h3>ID: {'\t'}{studentDetails.studentID}</h3>
-            <h3>Name: {studentDetails.studentName}</h3>
+          <h2>
+            <span style={{ color: '#f16522' }}>STUDENT</span> DETAILS
+          </h2>
+          <div className="student-details">
+            <h3>
+              ID: {'\t'}
+              {studentDetails.studentID}
+            </h3>
+            <h3>
+              Name: {studentDetails.studentFName} {studentDetails.studentLName}
+            </h3>
           </div>
         </div>
 
