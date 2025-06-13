@@ -22,10 +22,13 @@ function Absences({ absent }) {
     return stored ? JSON.parse(stored) : [];
   });
 
+  const [datesOfAbsences, setDates] = useState([]);
+
   const [selectedID, setSelectedID] = useState('');
   const [studDrop, setStudDrop] = useState([]);
   const [studentDetails, setStudentDetails] = useState({ studentID: '', studentName: '' });
 
+  // Get student details when selectedID changes
   useEffect(() => {
     const foundStudent = ids.find((stud) => stud.studentID === selectedID);
     if (foundStudent) {
@@ -35,50 +38,44 @@ function Absences({ absent }) {
     }
   }, [selectedID, ids]);
 
+  // Set dropdown values for student IDs
   useEffect(() => {
     const extracted = ids.map((item) => item.studentID);
     setStudDrop(extracted);
   }, [ids]);
 
-
+  // Compute dates of absence when selectedID or attendance changes
   useEffect(() => {
-    const stored = localStorage.getItem('StudentList');
-    if (stored) {
-      try {
-        setIds(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse localStorage:', e);
-        setIds([]);
-      }
+    if (selectedID !== '') {
+      const allDates = [
+        ...new Set(
+          attendance
+            .map((item) => item.time.split(',')[0].trim())
+            .filter((date) => date !== '')
+        ),
+      ];
+
+      const presentDates = [
+        ...new Set(
+          attendance
+            .filter((item) => item.id === selectedID)
+            .map((item) => item.time.split(',')[0].trim())
+        ),
+      ];
+
+      const absentDates = allDates.filter((date) => !presentDates.includes(date));
+      setDates(absentDates);
     }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('StudentList', JSON.stringify(ids));
-  }, [ids]);
-
-  const filteredAttendance = attendance
-    .filter((rec) => {
-      const matchID = selectedID ? rec.id === selectedID : true;
-
-      return matchID;
-    })
-    .sort((a, b) => new Date(b.time) - new Date(a.time));
+  }, [selectedID, attendance]);
 
   const clearFilters = () => {
     setSelectedID('');
+    setDates([]);
   };
 
-  const records_mapped = filteredAttendance.map((rec, index) => (
+  const records_mapped = datesOfAbsences.map((abse, index) => (
     <div key={index} className="absence-item">
-      <p>{rec.category}</p>
-      <h2>
-        <strong>{rec.id}</strong>
-      </h2>
-      <p>{rec.time}</p>
-      <p>
-        <b>{rec.user}</b>
-      </p>
+      <p>{abse}</p>
     </div>
   ));
 
@@ -113,6 +110,7 @@ function Absences({ absent }) {
             </select>
             <FontAwesomeIcon icon={faRotate} onClick={clearFilters} />
           </div>
+          <h2><span style={{ color: '#f16522' }}>STUDENT</span> DETAILS</h2>
           <div className='student-details'>
             <h3>ID: {'\t'}{studentDetails.studentID}</h3>
             <h3>Name: {studentDetails.studentName}</h3>
