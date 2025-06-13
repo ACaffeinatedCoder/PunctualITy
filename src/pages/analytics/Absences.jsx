@@ -125,10 +125,6 @@ function Absences({ absent }) {
       <div className="absence-and-analytics">
         <div className="id-container">
           <div className="absence-title">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="record-search-icon"
-            />
             <input
               value={selectedID}
               placeholder="Student ID..."

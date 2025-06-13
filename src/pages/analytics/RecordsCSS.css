@@ -166,7 +166,6 @@
     background-color: #57575a;
 }
 
-.record-item h1,
 .record-item p {
   margin: 0;
   flex: 1;
@@ -181,10 +180,14 @@
 }
 
 .record-item p:nth-of-type(2) {
-  text-align: right;
+  text-align: center;
 }
 
 .record-item p:nth-of-type(3) {
+  text-align: center;
+}
+
+.record-item p:nth-of-type(4) {
   text-align: center;
 }
 

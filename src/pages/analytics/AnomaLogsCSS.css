@@ -1,0 +1,79 @@
+.idlogs-container {
+  background-color: #202124;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 60%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+}
+
+.anomalogs-container {
+  background-color: #202124;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+}
+
+.anomalogs-title {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: #202124;
+  padding: 0rem;
+  border-radius: 8px;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  max-width: 90%;
+  color: white;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+
+.anomalogs-title h2 {
+    letter-spacing: 2vw;
+    font-size: 2vw;
+}
+
+.anomalogs-item {
+  display: flex;
+  justify-content: center;
+  background-color: #202124;
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  max-width: 90%;
+  color: white;
+  text-align: center;
+}
+
+.anomalogs-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.anomalogs-content p {
+  margin: 0;
+}
+
+.anomaly-text {
+  color: red;
+  font-weight: bold;
+}

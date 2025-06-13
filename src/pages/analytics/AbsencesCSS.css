@@ -57,7 +57,7 @@
   background-color: #202124;
   border-radius: 8px;
   padding: 0.5rem;
-  width: 40%;
+  width: 50%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -65,6 +65,7 @@
   margin: 0.5rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
 }
+
 .absence-container {
   background-color: #202124;
   border-radius: 8px;
@@ -103,6 +104,11 @@
   color: white;
   box-sizing: border-box;
   gap: 1rem;
+}
+
+.absence-title input {
+  font-size: 1.5vw;
+  border-radius: 5px;
 }
 
 .absence-title select {

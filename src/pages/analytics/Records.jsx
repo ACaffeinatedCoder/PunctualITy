@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './RecordsCSS.css';
 import Absences from './Absences';
+import AnomaLogs from './AnomaLogs';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 
@@ -42,7 +43,6 @@ function Records() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
 
-  const [studDrop, setStudDrop] = useState([]);
   const [categDrop, setCategDrop] = useState(['Clock In', 'Clock Out']);
   const [dateDrop, setDateDrop] = useState([]);
   const [facDrop, setFacDrop] = useState([]);
@@ -102,12 +102,17 @@ function Records() {
   const records_mapped = filteredAttendance.map((rec, index) => (
     <div key={index} className="record-item">
       <p>{rec.category}</p>
-      <h2>
-        <strong>{rec.studentId}</strong>
-      </h2>
       <p>
-        {rec.time} | {rec.date}
+        <strong>{rec.studentId}</strong>
       </p>
+      <div style={{flexDirection: 'column'}}>
+        <p>
+          <strong>{rec.date}</strong>
+        </p>
+        <p>
+          {rec.time}
+        </p>
+      </div>
       <p>
         <b>{rec.user}</b>
       </p>
@@ -197,7 +202,7 @@ function Records() {
           </div>
           <div className="records">
             <div className="analytics-subcontainer">
-              <div className="analytics-item" onClick={() => setAbsent(true)}>
+              <div className="analytics-item" onClick={() => setAbsent(true)} style={{ cursor: 'pointer' }}>
                 <h2>ABSENCES</h2>
                 <FontAwesomeIcon
                   icon={faUserXmark}
@@ -213,7 +218,7 @@ function Records() {
               </div>
             </div>
             <div className="analytics-subcontainer">
-              <div className="analytics-item">
+              <div className="analytics-item" onClick={() => setUnusual(true)} style={{ cursor: 'pointer' }}>
                 <h2>UNUSUAL LOGS</h2>
                 <FontAwesomeIcon
                   icon={faCircleExclamation}
@@ -252,6 +257,23 @@ function Records() {
             alignItems: 'center',
           }}>
           <Absences absent={setAbsent} />
+        </div>
+      )}
+      {unusualPage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#444',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <AnomaLogs suspicious={setUnusual} />
         </div>
       )}
     </div>

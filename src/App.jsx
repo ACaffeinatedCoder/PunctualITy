@@ -8,7 +8,7 @@ import Records from './pages/analytics/Records';
 /**
  * Filter Records, Sort Records*
  * Analytics Page
- * -- Compare IDs with Names
+ * -- Compare IDs with Names *
  * -- Compare Records with Events
  * -- Spot Anomalous Time-In and Time-Out
  * --- Incomplete Clocking: Time-In Only or Time-Out Only
