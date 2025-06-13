@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-.record-overall-container {
+.absence-overall-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -19,7 +19,7 @@
     z-index: 999;
 }
 
-.record-header {
+.absence-header {
   position: sticky;
   top: 0;
   width: 90%;
@@ -32,7 +32,7 @@
   border-radius: 15px;
 }
 
-.close-records {
+.close-absences {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -41,18 +41,31 @@
   cursor: pointer;
 }
 
-.record-and-analytics {
+.absence-and-analytics {
   border-radius: 8px;
   padding: 0.5rem;
   width: 95%;
   max-width: 95%;
+  height: 100%;
   text-align: center;
   display: flex;
   flex-direction: row;
   align-items: center, stretch;
 }
 
-.record-container {
+.id-container {
+  background-color: #202124;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 40%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+}
+.absence-container {
   background-color: #202124;
   border-radius: 8px;
   padding: 0.5rem;
@@ -65,7 +78,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
 }
 
-.records {
+.absences {
   height: 65vh;
   width: 100%;
   overflow-y: auto;
@@ -74,7 +87,7 @@
   align-items: center;
 }
 
-.record-title {
+.absence-title {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; /* allow wrapping on smaller screens */
@@ -92,7 +105,7 @@
   gap: 1rem;
 }
 
-.record-title select {
+.absence-title select {
   flex: 1 1 0;
   min-width: 0;
   padding: 0.5rem;
@@ -119,7 +132,7 @@
   align-items: center, stretch;
 }
 
-.record-item {
+.absence-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -134,33 +147,33 @@
   text-align: center;
 }
 
-.record-item:hover {
+.absence-item:hover {
     background-color: #57575a;
 }
 
-.record-item h1,
-.record-item p {
+.absence-item h1,
+.absence-item p {
   margin: 0;
   flex: 1;
 }
 
-.record-item h1 {
+.absence-item h1 {
   text-align: left;
 }
 
-.record-item p:nth-of-type(1) {
+.absence-item p:nth-of-type(1) {
   text-align: center;
 }
 
-.record-item p:nth-of-type(2) {
+.absence-item p:nth-of-type(2) {
   text-align: right;
 }
 
-.record-item p:nth-of-type(3) {
+.absence-item p:nth-of-type(3) {
   text-align: center;
 }
 
-.analytics-title {
+.absence-title {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; /* allow wrapping on smaller screens */
@@ -176,6 +189,46 @@
   color: #f6941d;
   box-sizing: border-box;
   gap: 1rem;
+}
+
+.id-title {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: #202124;
+  padding: 0rem;
+  border-radius: 8px;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  max-width: 90%;
+  color: #f6941d;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+
+.id-title h2 {
+    letter-spacing: 2vw;
+    font-size: 2vw;
+}
+
+.student-details {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  background-color: #202124;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  height: 90%;
+  max-width: 90%;
+  max-height: 90%;
+  color: white;
+  text-align: left;
 }
 
 .analytics-item {
@@ -196,7 +249,7 @@
   transition: color 0.3s ease, font-size 0.3s ease;
 }
 
-.analytics-item h2{
+.analytics-item h2 {
   margin: 0;
   margin-bottom: 0.5vw;
   padding: 0.1vw;
@@ -204,44 +257,15 @@
 
 .analytics-icon {
   color: #f6941d;
-  font-size:  4vw;
+  font-size: 4vw;
   transition: color 0.3s ease, font-size 0.3s ease;
 }
 
 .analytics-item:hover {
   background-color: #808086;
   color: black;
-  font-size: 1.5vw
+  font-size: 1.5vw;
 }
-
-/*
-.record-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #202124;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin: 0.5rem 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  color: white;
-  text-align: left;
-}
-
-.record-item h2 {
-  font-size: 1.25rem;
-  margin: 0;
-}
-
-.record-item p {
-  margin: 0;
-  font-size: 1rem;
-}
-  */
-
 
 .read-the-docs {
   color: rgb(68, 68, 68);

@@ -1,7 +1,8 @@
-import { faCircleXmark, faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faCircleExclamation, faCircleXmark, faPersonCircleExclamation, faPersonCircleQuestion, faRotate, faUserXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './RecordsCSS.css';
+import Absences from './Absences';
 
 function Records() {
   const [attendance, setAttendance] = useState(() => {
@@ -23,6 +24,11 @@ function Records() {
   const [categDrop, setCategDrop] = useState(['Clock In', 'Clock Out']);
   const [dateDrop, setDateDrop] = useState([]);
   const [facDrop, setFacDrop] = useState([]);
+
+  const [absentPage, setAbsent] = useState(false);
+  const [latePage, setLate] = useState(false);
+  const [unusualPage, setUnusual] = useState(false);
+  const [eventsPage, setEvents] = useState(false);
 
   useEffect(() => {
     const extracted = ids.map((item) => item.studentID);
@@ -67,14 +73,14 @@ function Records() {
     localStorage.setItem('StudentList', JSON.stringify(ids));
   }, [ids]);
 
-  /*
+  
   const [studID, setStudID] = useState('');
   const [studName, setStudName] = useState('');
   
   const newStudent = () => {
     setIds([...ids, { studentID: studID, studentName: studName }]);
   };
-  */
+  
 
   // for filtering
   const filteredAttendance = attendance
@@ -199,13 +205,47 @@ function Records() {
             width: '20px',
             height: '100%',
             backgroundColor: '#242424',
-          }}></div>
+          }}>
+          </div>
 
         <div className="record-container">
           <div className="analytics-title">
             <h2>ANALYTICS</h2>
           </div>
           <div className="records">
+            <div className='analytics-subcontainer'>
+              <div className='analytics-item'
+                  onClick={() => setAbsent(true)}>
+                <h2>ABSENCES</h2>
+                <FontAwesomeIcon
+                  icon={faUserXmark}
+                  className='analytics-icon'
+                />
+              </div>
+              <div className='analytics-item'>
+                <h2>TARDINESS</h2>
+                <FontAwesomeIcon
+                  icon={faPersonCircleQuestion}
+                  className='analytics-icon'
+                />
+              </div>
+            </div>
+            <div className='analytics-subcontainer'>
+              <div className='analytics-item'>
+                <h2>UNUSUAL LOGS</h2>
+                <FontAwesomeIcon
+                  icon={faCircleExclamation}
+                  className='analytics-icon'
+                />
+              </div>
+              <div className='analytics-item'>
+                <h2>EVENTS</h2>
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  className='analytics-icon'
+                />
+              </div>
+            </div>
             {/*
                         <input
                             onChange={(e) => setStudID(e.target.value)}
@@ -230,6 +270,23 @@ function Records() {
           Taytay's College of Engineering and Information Technology Department.
         </p>
       </div>
+      {absentPage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#444',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Absences absent={setAbsent}/>
+        </div>
+      )}
     </div>
   );
 }

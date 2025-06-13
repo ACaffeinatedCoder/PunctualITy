@@ -13,6 +13,12 @@ import Records from './pages/analytics/Records';
  * -- Spot Anomalous Time-In and Time-Out
  * --- Incomplete Clocking: Time-In Only or Time-Out Only
  * --- Incomplete Clocking for Event
+ * 
+ * Analysis:
+ *    Records of Tardiness
+ *    Records of Absences
+ *    Did the student stay for the event?
+ * 
  * Authentication
  * -- Match Credentials with Records *
  * -- Per Clocking, log Credentials as well *
