@@ -10,7 +10,7 @@
     padding: 0.5vw;
 }
 
-.events-name input {
+.events-name input, .events-name select {
     border-radius: 10px;
     font-size: 1.25vw;
 }
@@ -36,7 +36,71 @@
   text-align: left;
 }
 
+.events-details .form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 20px;
+}
+
+.events-details h2 {
+  width: 200px;
+  font-size: 1.2vw;
+  margin: 0;
+}
+
+.events-details input,
+.events-details select {
+  flex: 1;
+  padding: 6px;
+  font-size: 1.1vw;
+}
+
+
 .events-submit {
     font-size: 1.5vw;
     padding: 0.75vw;
+}
+
+.events-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #202124;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  max-width: 90%;
+  color: white;
+  text-align: center;
+}
+
+.events-item:hover {
+    background-color: #57575a;
+}
+
+.events-item h1,
+.events-item p {
+  margin: 0;
+  flex: 1;
+  font-size: 1vw
+}
+
+.events-item h1 {
+  text-align: left;
+}
+
+.events-item p:nth-of-type(1) {
+  text-align: center;
+}
+
+.events-item p:nth-of-type(2) {
+  text-align: right;
+}
+
+.events-item p:nth-of-type(3) {
+  text-align: center;
 }

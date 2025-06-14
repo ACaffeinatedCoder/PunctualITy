@@ -9,7 +9,14 @@ import { useEffect, useState } from 'react';
 import './AbsencesCSS.css';
 import './AnomaLogsCSS.css';
 import './EventsCSS.css';
-import { collection, getDocs, query } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  doc,
+  setDoc,
+  getDoc,
+} from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 
 function Events({ events }) {
@@ -23,16 +30,25 @@ function Events({ events }) {
   const [eveSY, setEveSY] = useState('');
 
   const [sYs, setSys] = useState([]);
-  const [filledForm, setFilledForm] = useState(false)
+  const [filledForm, setFilledForm] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    if(eveName !== '' && eveDate !== '' && eveStart !== '' && eveEnd !== '' && eveSem !== '' && eveSY !== '' && errorMsg === '') {
-        /** Form has been filled */
-        setFilledForm(true)
+    if (
+      eveName !== '' &&
+      eveDate !== '' &&
+      eveStart !== '' &&
+      eveEnd !== '' &&
+      eveSem !== '' &&
+      eveSY !== '' &&
+      errorMsg === ''
+    ) {
+      /** Form has been filled */
+      setFilledForm(true);
     } else {
-        setFilledForm(false)
+      setFilledForm(false);
     }
-  }, [eveName, eveDate, eveStart, eveEnd, eveSem, eveSY])
+  }, [eveName, eveDate, eveStart, eveEnd, eveSem, eveSY]);
 
   const getSYs = () => {
     // get current year
@@ -42,8 +58,6 @@ function Events({ events }) {
     const yearBefore = `${ay - 1}-${ay}`;
     setSys([yearBefore, yearNow]);
   };
-
-  const [errorMsg, setErrorMsg] = useState('');
 
   const getEvents = async () => {
     const recordCollection = collection(db, 'Event-Information');
@@ -73,9 +87,13 @@ function Events({ events }) {
   };
 
   const records_mapped = eventsList
-    .filter((eve) => searchItem === '' || eve.eventName === searchItem)
+    .filter(
+      (eve) =>
+        searchItem.trim() === '' ||
+        eve.eventName.toLowerCase().includes(searchItem.toLowerCase())
+    )
     .map((eve, index) => (
-      <div key={index} className="absence-item">
+      <div key={index} className="events-item">
         <p>
           <strong>{eve.eventName}</strong> &nbsp;&nbsp;&nbsp;&nbsp;
           {eve.semester} Semester&nbsp;&nbsp;&nbsp;&nbsp;
@@ -91,13 +109,70 @@ function Events({ events }) {
       </div>
     ));
 
-    const submitEventDetails = async () => {
-        if (filledForm === false) {
-            alert('Incomplete event details')
-        } else {
+  const submitEventDetails = async () => {
+    if (filledForm === false) {
+      alert('Incomplete event details');
+    } else {
+      const parts = eveSY.split('-');
+      const yearPart = parts[0].slice(2) + parts[1].slice(2);
 
+      const semesterCode =
+        eveSem === '1st' ? '01' : eveSem === '2nd' ? '02' : 'SUM';
+
+      const namePart = eveName
+        .trim()
+        .split(/\s+/)
+        .map((word) => word.slice(0, 3).toUpperCase())
+        .join('');
+
+      const eventID = `${yearPart}${semesterCode}_${namePart}`;
+
+      try {
+        const collectionRef = collection(db, 'Event-Information');
+        const documentRef = doc(collectionRef, eventID);
+
+        const existingDoc = await getDoc(documentRef);
+
+        if (existingDoc.exists()) {
+          alert(
+            'Event with similar name in the similar school year already exists. Please use a different name.'
+          );
+          return;
         }
+
+        const newEvent = {
+          date: eveDate,
+          eventName: eveName,
+          schoolYear: eveSY,
+          semester: eveSem,
+          timeEnd: eveEnd,
+          timeStart: eveStart,
+        };
+
+        await setDoc(documentRef, newEvent);
+
+        alert('Event added!');
+        getEvents();
+        resetForm();
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        alert(
+          'Something went wrong. Please contact your technician for checking.'
+        );
+      }
     }
+  };
+
+  const resetForm = () => {
+    setEveDate('');
+    setEveEnd('');
+    setEveStart('');
+    setEveName('');
+    setEveSY('');
+    setEveSem('');
+    setFilledForm(false);
+    setErrorMsg('');
+  };
 
   return (
     <div className="absence-overall-container">
@@ -123,30 +198,50 @@ function Events({ events }) {
             />
             <FontAwesomeIcon icon={faRotate} onClick={clearFilters} />
           </div>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <h2>
-                <span style={{ color: '#f16522' }}>Add</span> an event
+              <span style={{ color: '#f16522' }}>Add</span> an event
             </h2>
             <FontAwesomeIcon
-                icon={faUpload}
-                className='events-submit'
-                style={{ cursor: 'pointer', color:  filledForm ? 'green' : 'red'}}
-                onClick={() => submitEventDetails()}
+              icon={faUpload}
+              className="events-submit"
+              style={{ cursor: 'pointer', color: filledForm ? 'green' : 'red' }}
+              onClick={() => submitEventDetails()}
             />
           </div>
           <div className="events-details">
             <div className="events-name">
-              <h2>Name of Event</h2>
-              <input onChange={(e) => setEveName(e.target.value)} />
+              <h2>
+                <span style={{ color: '#f16522' }}>Name</span> of Event
+              </h2>
+              <input
+                value={eveName}
+                onChange={(e) => setEveName(e.target.value)}
+              />
             </div>
             <div className="events-name">
-              <h2>Date of Event</h2>
-              <input type="date" onChange={(e) => setEveDate(e.target.value)} />
+              <h2>
+                <span style={{ color: '#f16522' }}>Date</span> of Event
+              </h2>
+              <input
+                type="date"
+                value={eveDate}
+                onChange={(e) => setEveDate(e.target.value)}
+              />
             </div>
             <div className="events-name">
-              <h2>Time Start</h2>
+              <h2>
+                Time <span style={{ color: '#f16522' }}>Start</span>
+              </h2>
               <input
                 type="time"
+                value={eveStart}
                 // onChange={(e) => setEveStart(e.target.value)}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -162,9 +257,12 @@ function Events({ events }) {
               />
             </div>
             <div className="events-name">
-              <h2>Time End</h2>
+              <h2>
+                Time <span style={{ color: '#f16522' }}>End</span>
+              </h2>
               <input
                 type="time"
+                value={eveEnd}
                 // onChange={(e) => setEveEnd(e.target.value)}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -180,7 +278,9 @@ function Events({ events }) {
               />
             </div>
             <div className="events-name">
-              <h2>Semester</h2>
+              <h2>
+                <span style={{ color: '#f16522' }}>Sem</span>ester
+              </h2>
               <select
                 value={eveSem}
                 onChange={(e) => setEveSem(e.target.value)}>
@@ -193,7 +293,9 @@ function Events({ events }) {
               </select>
             </div>
             <div className="events-name">
-              <h2>School Year</h2>
+              <h2>
+                School <span style={{ color: '#f16522' }}>Year</span>
+              </h2>
               <select value={eveSY} onChange={(e) => setEveSY(e.target.value)}>
                 <option value="" disabled>
                   Select School Year
@@ -205,7 +307,7 @@ function Events({ events }) {
                 ))}
               </select>
             </div>
-              {errorMsg && <p style={{ color: 'red' }}>Error: {errorMsg}</p>}
+            {errorMsg && <p style={{ color: 'red' }}>Error: {errorMsg}</p>}
           </div>
         </div>
 
