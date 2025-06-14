@@ -50,6 +50,13 @@ function Events({ events }) {
     }
   }, [eveName, eveDate, eveStart, eveEnd, eveSem, eveSY]);
 
+  useEffect(() => {
+    if (errorMsg !== '') {
+        alert(errorMsg)
+    }
+
+  }, [errorMsg])
+
   const getSYs = () => {
     // get current year
     if (!eveDate) return;
@@ -176,7 +183,7 @@ function Events({ events }) {
 
   return (
     <div className="absence-overall-container">
-      <div className="absence-header">
+      <div className="events-header">
         <FontAwesomeIcon
           icon={faCircleXmark}
           className="close-absences"
@@ -188,9 +195,9 @@ function Events({ events }) {
         </h1>
       </div>
 
-      <div className="absence-and-analytics">
-        <div className="idlogs-container">
-          <div className="absence-title">
+      <div className="events-overall">
+        <div className="events-container">
+          <div className="events-title">
             <input
               value={searchItem}
               placeholder="Event name..."
@@ -307,17 +314,16 @@ function Events({ events }) {
                 ))}
               </select>
             </div>
-            {errorMsg && <p style={{ color: 'red' }}>Error: {errorMsg}</p>}
           </div>
         </div>
 
-        <div className="anomalogs-container">
+        <div className="events-container2">
           <div className="anomalogs-title">
             <h2>
               <span style={{ color: '#f6941d' }}>EVENT</span> DETAILS
             </h2>
           </div>
-          <div className="records">{records_mapped}</div>
+          <div className="events-records">{records_mapped}</div>
         </div>
       </div>
       <div>

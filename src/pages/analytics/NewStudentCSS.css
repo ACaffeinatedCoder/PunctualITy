@@ -1,0 +1,32 @@
+.newstud-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #202124;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+  width: 90%;
+  height: 90%;
+  color: white;
+  text-align: left;
+}
+
+.newstud-details .form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.newstud-details h2 {
+  width: 10vw;
+  font-size: 1.5vw;
+}
+
+.newstud-details input {
+  flex: 1;
+  padding: 3px;
+  font-size: 1.1vw;
+}

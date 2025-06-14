@@ -6,6 +6,7 @@ import {
   faPersonCircleExclamation,
   faPersonCircleQuestion,
   faRotate,
+  faUserPlus,
   faUserXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +17,7 @@ import AnomaLogs from './AnomaLogs';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 import Events from './Events';
+import NewStudent from './NewStudent';
 
 function Records() {
   const [attendance, setAttendance] = useState([]);
@@ -49,7 +51,7 @@ function Records() {
   const [facDrop, setFacDrop] = useState([]);
 
   const [absentPage, setAbsent] = useState(false);
-  const [latePage, setLate] = useState(false);
+  const [newStudentPage, setStudent] = useState(false);
   const [unusualPage, setUnusual] = useState(false);
   const [eventsPage, setEvents] = useState(false);
 
@@ -210,10 +212,10 @@ function Records() {
                   className="analytics-icon"
                 />
               </div>
-              <div className="analytics-item">
-                <h2>TARDINESS</h2>
+              <div className="analytics-item" onClick={() => setStudent(true)} style={{ cursor: 'pointer' }}>
+                <h2>ADD STUDENT</h2>
                 <FontAwesomeIcon
-                  icon={faPersonCircleQuestion}
+                  icon={faUserPlus}
                   className="analytics-icon"
                 />
               </div>
@@ -258,6 +260,23 @@ function Records() {
             alignItems: 'center',
           }}>
           <Absences absent={setAbsent} />
+        </div>
+      )}
+      {newStudentPage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#444',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <NewStudent newPage={setStudent} />
         </div>
       )}
       {unusualPage && (
