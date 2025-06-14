@@ -198,12 +198,6 @@ function AnomaLogs({ suspicious }) {
           <div className="records">{records_mapped}</div>
         </div>
       </div>
-      <div>
-        <p className="read-the-docs">
-          This website was developed by Mr. Francisco for the Siena College of
-          Taytay's College of Engineering and Information Technology Department.
-        </p>
-      </div>
     </div>
   );
 }
