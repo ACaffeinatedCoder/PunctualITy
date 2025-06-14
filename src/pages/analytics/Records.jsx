@@ -15,6 +15,7 @@ import Absences from './Absences';
 import AnomaLogs from './AnomaLogs';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
+import Events from './Events';
 
 function Records() {
   const [attendance, setAttendance] = useState([]);
@@ -225,7 +226,7 @@ function Records() {
                   className="analytics-icon"
                 />
               </div>
-              <div className="analytics-item">
+              <div className="analytics-item" onClick={() => setEvents(true)} style={{ cursor: 'pointer' }}>
                 <h2>EVENTS</h2>
                 <FontAwesomeIcon
                   icon={faCalendarDays}
@@ -274,6 +275,23 @@ function Records() {
             alignItems: 'center',
           }}>
           <AnomaLogs suspicious={setUnusual} />
+        </div>
+      )}
+      {eventsPage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#444',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Events events={setEvents} />
         </div>
       )}
     </div>
