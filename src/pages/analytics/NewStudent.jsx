@@ -7,15 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import './AbsencesCSS.css';
 import './AnomaLogsCSS.css';
-import './EventsCSS.css'
-import './NewStudentCSS.css'
-import { 
+import './EventsCSS.css';
+import './NewStudentCSS.css';
+import {
   collection,
   getDocs,
   query,
   doc,
   setDoc,
-  getDoc,} from 'firebase/firestore';
+  getDoc,
+} from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 
 function NewStudent({ newPage }) {
@@ -63,65 +64,66 @@ function NewStudent({ newPage }) {
   }, []);
 
   useEffect(() => {
-    findNewStudents()
-  }, [students])
+    findNewStudents();
+  }, [students]);
 
   const findNewStudents = () => {
     const recordedStudents = [...new Set(students.map((item) => item.id))];
-    
+
     const allStudents = [
       ...new Set(
-        attendance.map((item) => item.studentId).filter((studentId) => studentId !== '')
+        attendance
+          .map((item) => item.studentId)
+          .filter((studentId) => studentId !== '')
       ),
     ];
 
     const newStudents = allStudents.filter(
-        (stud) => !recordedStudents.includes(stud)
-    )
+      (stud) => !recordedStudents.includes(stud)
+    );
 
-    setNewStudents(newStudents)
-  }
+    setNewStudents(newStudents);
+  };
 
   const addNewStudent = async () => {
     if (newId !== '' && newFName !== '' && newSName !== '') {
-        try {
-                const collectionRef = collection(db, 'Student-Information');
-                const documentRef = doc(collectionRef, newId);
-        
-                const newStudent = {
-                  firstname: newFName,
-                  lastname: newSName,
-                };
-        
-                await setDoc(documentRef, newStudent);
-        
-                alert('Student added!');
-                getStudents();
-                resetForm();
-              } catch (error) {
-                console.error('Error adding document: ', error);
-                alert(
-                  'Something went wrong. Please contact your technician for checking.'
-                );
-              }
+      try {
+        const collectionRef = collection(db, 'Student-Information');
+        const documentRef = doc(collectionRef, newId);
+
+        const newStudent = {
+          firstname: newFName,
+          lastname: newSName,
+        };
+
+        await setDoc(documentRef, newStudent);
+
+        alert('Student added!');
+        getStudents();
+        resetForm();
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        alert(
+          'Something went wrong. Please contact your technician for checking.'
+        );
+      }
     } else {
-        alert('Incomplete student information...')
+      alert('Incomplete student information...');
     }
-  }
-  
+  };
+
   const resetForm = () => {
     setNewId('');
     setNewFName('');
     setNewSName('');
   };
-  
+
   const records_mapped = newStudents.map((rec, index) => (
     <div
       key={index}
       className="absence-item"
       style={{ cursor: 'pointer' }}
-      onClick={() => setNewId(rec)}
-    >
+      onClick={() => setNewId(rec)}>
       <p>
         <strong>{rec}</strong>
       </p>
@@ -138,7 +140,10 @@ function NewStudent({ newPage }) {
           onClick={() => newPage(false)}
         />
         <h1>
-          <span style={{ color: '#f16522' }} onClick={() => findNewStudents()}>ADD</span> STUDENT
+          <span style={{ color: '#f16522' }} onClick={() => findNewStudents()}>
+            ADD
+          </span>{' '}
+          STUDENT
         </h1>
       </div>
 
@@ -153,7 +158,7 @@ function NewStudent({ newPage }) {
                 <span style={{ color: '#f16522' }}>ID</span> of Student:
               </h2>
               <input
-                placeholder='Student ID...'
+                placeholder="Student ID..."
                 value={newId}
                 onChange={(e) => setNewId(e.target.value)}
               />
@@ -163,7 +168,7 @@ function NewStudent({ newPage }) {
                 <span style={{ color: '#f16522' }}>First</span> Name:
               </h2>
               <input
-                placeholder='Student First Name...'
+                placeholder="Student First Name..."
                 value={newFName}
                 onChange={(e) => setNewFName(e.target.value)}
               />
@@ -173,14 +178,14 @@ function NewStudent({ newPage }) {
                 <span style={{ color: '#f16522' }}>Surname</span>:
               </h2>
               <input
-                placeholder='Student Surname...'
+                placeholder="Student Surname..."
                 value={newSName}
                 onChange={(e) => setNewSName(e.target.value)}
               />
             </div>
-            <button
-                onClick={() => addNewStudent()}
-            >Submit Student Information</button>
+            <button onClick={() => addNewStudent()}>
+              Submit Student Information
+            </button>
           </div>
         </div>
 
@@ -190,9 +195,7 @@ function NewStudent({ newPage }) {
               <span style={{ color: '#f6941d' }}>UNNAMED</span> IDs
             </h2>
           </div>
-          <div className="records">
-            {records_mapped}
-          </div>
+          <div className="records">{records_mapped}</div>
         </div>
       </div>
     </div>

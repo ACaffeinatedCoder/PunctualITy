@@ -108,13 +108,11 @@ function Records() {
       <p>
         <strong>{rec.studentId}</strong>
       </p>
-      <div style={{flexDirection: 'column'}}>
+      <div style={{ flexDirection: 'column' }}>
         <p>
           <strong>{rec.date}</strong>
         </p>
-        <p>
-          {rec.time}
-        </p>
+        <p>{rec.time}</p>
       </div>
       <p>
         <b>{rec.user}</b>
@@ -205,30 +203,39 @@ function Records() {
           </div>
           <div className="records">
             <div className="analytics-subcontainer">
-              <div className="analytics-item" onClick={() => setAbsent(true)} style={{ cursor: 'pointer' }}>
+              <div
+                className="analytics-item"
+                onClick={() => setAbsent(true)}
+                style={{ cursor: 'pointer' }}>
                 <h2>ABSENCES</h2>
                 <FontAwesomeIcon
                   icon={faUserXmark}
                   className="analytics-icon"
                 />
               </div>
-              <div className="analytics-item" onClick={() => setStudent(true)} style={{ cursor: 'pointer' }}>
+              <div
+                className="analytics-item"
+                onClick={() => setStudent(true)}
+                style={{ cursor: 'pointer' }}>
                 <h2>ADD STUDENT</h2>
-                <FontAwesomeIcon
-                  icon={faUserPlus}
-                  className="analytics-icon"
-                />
+                <FontAwesomeIcon icon={faUserPlus} className="analytics-icon" />
               </div>
             </div>
             <div className="analytics-subcontainer">
-              <div className="analytics-item" onClick={() => setUnusual(true)} style={{ cursor: 'pointer' }}>
+              <div
+                className="analytics-item"
+                onClick={() => setUnusual(true)}
+                style={{ cursor: 'pointer' }}>
                 <h2>UNUSUAL LOGS</h2>
                 <FontAwesomeIcon
                   icon={faCircleExclamation}
                   className="analytics-icon"
                 />
               </div>
-              <div className="analytics-item" onClick={() => setEvents(true)} style={{ cursor: 'pointer' }}>
+              <div
+                className="analytics-item"
+                onClick={() => setEvents(true)}
+                style={{ cursor: 'pointer' }}>
                 <h2>EVENTS</h2>
                 <FontAwesomeIcon
                   icon={faCalendarDays}

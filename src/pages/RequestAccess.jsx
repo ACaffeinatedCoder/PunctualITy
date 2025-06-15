@@ -6,6 +6,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useRef } from 'react';
 import './AccessCSS.css';
 
+/**
+ * -- REVAMP --
+ * Turn into a login page
+ *  - signInWithEmailAndPassword
+ * 
+ * Track user
+ *  - onAuthStateChanged?
+ *  - setDoc(doc(db, "Users", user.uid)) upon register
+ * {
+ *    email, role, displayName
+ * }
+ *  - const userDoc = await getDoc(doc(db, "Users", user.uid));
+ *  - (const userInfo = userDoc.data();
+ * 
+ * Restrict pages per role
+ *  - check role of current user and restrict accordingly
+ *  - use createContext for a globally available variable
+ */
+
 function RequestAccess({ panel, attendee }) {
   const [access, setAccess] = useState(true);
   const [email, setEmail] = useState('');
