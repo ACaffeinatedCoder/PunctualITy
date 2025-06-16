@@ -2,62 +2,31 @@ import './App.css';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faPersonRunning } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faPersonRunning, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import RequestAccess from './pages/RequestAccess';
+import { useAuth } from './AuthContext';
 
 /**
  * Departmental colors:
  *   #f16522 #f6941d #020202
  */
 export default function MainLandingPage() {
+  const { currentUser, isLoggedIn, logout } = useAuth()
   const [rec, setRec] = useState(true);
-  const [user, setUser] = useState(localStorage.getItem('User'));
+
+  const { mockLogin } = useAuth()
+
+  const handleLogin = () => {
+    mockLogin('');
+  }
 
   useEffect(() => {
     //check if 'User' is empty
-    localStorage.setItem('User', user);
-
-    if (localStorage.getItem('User') === '') {
-      // no User, open the login page
-      setRec(true);
-    } else {
-      // User detected, do not render the login page
-      setRec(false);
-    }
+    setRec(!isLoggedIn)
   });
 
-  /*
-  useEffect(() => {
-    console.log('I\'m rendered 13')
-
-    if (localStorage.getItem('logged') === false) {
-      console.log('you are logged OUT')
-      setRec(true)
-    } else {
-      console.log('you are logged IN')
-      setRec(false)
-    }
-  })
-
-  useEffect(() => {
-    // Mock Credential
-    if (user !== '') {
-      console.log('CREDS logged IN')
-      localStorage.setItem('logged', true)
-      setRec(false)
-    } else if (user === ''){
-      console.log('CREDS logged OUT')
-      localStorage.setItem('logged', false)
-      setRec(true)
-    }
-
-    localStorage.setItem('User', user)
-    console.log(localStorage.getItem('User'))
-  }, [user])
-  */
-
   return (
-    <div>
+    <div> 
       <div>
         <div
           style={{
@@ -71,6 +40,12 @@ export default function MainLandingPage() {
             zIndex: 100,
             flexDirection: 'column',
           }}>
+                 
+          <div className="record-header">
+              <FontAwesomeIcon icon={faRightFromBracket} className="close-records"
+                onClick={() => logout()}
+              />
+          </div>
           <h1>
             Punctual
             <a href="/records">
@@ -78,16 +53,15 @@ export default function MainLandingPage() {
             </a>
             y
           </h1>
-          <h3 style={{ paddingBottom: '10%' }}>
-            by{' '}
+          {currentUser && <h3 style={{ paddingBottom: '10%' }}>
+            Welcome,{' '}
             <i
-              onClick={() => {
-                setUser('');
-                localStorage.setItem('User', '');
-              }}>
-              acaffeinatedcoder
+              onClick={() => handleLogin()}
+            >
+              {currentUser.email}
             </i>
           </h3>
+}
         </div>
         <div className="card">
           <p>How are you clocking?</p>
@@ -128,7 +102,7 @@ export default function MainLandingPage() {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <RequestAccess panel={setRec} attendee={setUser} />
+          <RequestAccess panel={setRec} />
         </div>
       )}
     </div>

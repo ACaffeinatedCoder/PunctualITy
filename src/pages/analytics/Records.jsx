@@ -7,6 +7,7 @@ import {
   faPersonCircleQuestion,
   faRotate,
   faUserPlus,
+  faUserTie,
   faUserXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,6 +19,7 @@ import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 import Events from './Events';
 import NewStudent from './NewStudent';
+import NewFaculty from './NewFaculty';
 
 function Records() {
   const [attendance, setAttendance] = useState([]);
@@ -54,6 +56,7 @@ function Records() {
   const [newStudentPage, setStudent] = useState(false);
   const [unusualPage, setUnusual] = useState(false);
   const [eventsPage, setEvents] = useState(false);
+  const [facultyPage, setFaculty] = useState(false);
 
   useEffect(() => {
     const extracted = [
@@ -243,6 +246,15 @@ function Records() {
                 />
               </div>
             </div>
+            <div className="analytics-subcontainer">
+              <div
+                className="analytics-item"
+                onClick={() => setFaculty(true)}
+                style={{ cursor: 'pointer' }}>
+                <h2>ADD FACULTY</h2>
+                <FontAwesomeIcon icon={faUserTie} className="analytics-icon" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -312,6 +324,23 @@ function Records() {
             alignItems: 'center',
           }}>
           <Events events={setEvents} />
+        </div>
+      )}
+      {facultyPage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#444',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <NewFaculty faculty={setFaculty} />
         </div>
       )}
     </div>

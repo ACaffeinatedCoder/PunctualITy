@@ -30,6 +30,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  text-align: center;
   background-color: #202124;
   padding: 0rem;
   border-radius: 8px;
@@ -39,12 +40,13 @@
   max-width: 90%;
   color: white;
   box-sizing: border-box;
-  gap: 1rem;
+  gap: 0rem;
 }
 
 .anomalogs-title h2 {
-    letter-spacing: 2vw;
+    letter-spacing: 1vw;
     font-size: 2vw;
+    text-align: center;
 }
 
 .anomalogs-item {

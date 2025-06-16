@@ -102,7 +102,7 @@ function NewStudent({ newPage }) {
         getStudents();
         resetForm();
       } catch (error) {
-        console.error('Error adding document: ', error);
+        console.error('Error processing request: ', error);
         alert(
           'Something went wrong. Please contact your technician for checking.'
         );
