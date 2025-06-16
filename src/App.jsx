@@ -11,15 +11,13 @@ import UnauthorizedPage from './Unauthorized';
  * Filter Records, Sort Records*
  * Analytics Page
  * -- Compare IDs with Names *
- * -- Compare Records with Events
  * -- Spot Anomalous Time-In and Time-Out *
  * --- Incomplete Clocking: Time-In Only or Time-Out Only *
- * --- Incomplete Clocking for Event
+ * -- Compare Records with Events *
  * 
  * Analysis:
- *    Records of Tardiness - discontinued
+ *    Records of Tardiness *
  *    Records of Absences *
- *    Did the student stay for the event?
  * 
  * Authentication
  * -- Match Credentials with Records *

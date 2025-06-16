@@ -4,8 +4,12 @@ import { useEffect, useState, useRef } from 'react';
 import './ClockInCSS.css';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
+import { useAuth } from '../AuthContext';
 
 function ClockOut() {
+
+  const { currentUser } = useAuth()
+
   const [scannedID, setScannedID] = useState('');
   const [animate, setAnimate] = useState(false);
   const inputRef = useRef(null);
@@ -39,7 +43,7 @@ function ClockOut() {
 
       setAnimate(true);
 
-      let attendant = localStorage.getItem('User');
+      let attendant = currentUser.displayName;
 
       const newRecord = {
         category: 'Clock Out',

@@ -1,6 +1,4 @@
 import {
-  faLock,
-  faLockOpen,
   faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -48,12 +46,6 @@ function RequestAccess({ panel }) {
       <h1>
         Enter your <span style={{ color: '#f16522' }}>Credentials</span>.
       </h1>
-      <div className="card">
-        <FontAwesomeIcon
-          icon={access ? faLock : faLockOpen}
-          className={`lock-icon ${access ? 'fade-out' : 'fade-in'}`}
-        />
-      </div>
       <div className="credentials">
         <input
           onChange={(e) => setEmail(e.target.value)}

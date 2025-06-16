@@ -20,7 +20,7 @@ import {
 import { db } from '../../config/firebase-config';
 import { useAuth } from '../../AuthContext';
 
-function NewFaculty({ newPage }) {
+function NewFaculty({ faculty }) {
   const { registerUser } = useAuth();
 
   const [facultyMembers, setFacultyMembers] = useState([]);
@@ -92,7 +92,7 @@ function NewFaculty({ newPage }) {
           icon={faCircleXmark}
           className="close-absences"
           style={{ cursor: 'pointer' }}
-          onClick={() => newPage(false)}
+          onClick={() => faculty(false)}
         />
         <h1>
           ADD{' '}

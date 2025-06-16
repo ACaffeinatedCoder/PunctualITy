@@ -4,11 +4,14 @@ import { useEffect, useState, useRef } from 'react';
 import './ClockInCSS.css';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
+import { useAuth } from '../AuthContext';
 
 function ClockIn() {
   const [scannedID, setScannedID] = useState('');
   const [animate, setAnimate] = useState(false);
   const inputRef = useRef(null);
+
+  const { currentUser } = useAuth()
 
   useEffect(() => {
     const focusInput = () => {
@@ -39,7 +42,7 @@ function ClockIn() {
 
       setAnimate(true);
 
-      let attendant = localStorage.getItem('User');
+      let attendant = currentUser.displayName;
 
       const newRecord = {
         category: 'Clock In',

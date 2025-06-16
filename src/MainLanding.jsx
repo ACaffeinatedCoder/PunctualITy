@@ -2,7 +2,11 @@ import './App.css';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faPersonRunning, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import {
+  faClock,
+  faPersonRunning,
+  faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
 import RequestAccess from './pages/RequestAccess';
 import { useAuth } from './AuthContext';
 
@@ -11,22 +15,22 @@ import { useAuth } from './AuthContext';
  *   #f16522 #f6941d #020202
  */
 export default function MainLandingPage() {
-  const { currentUser, isLoggedIn, logout } = useAuth()
+  const { currentUser, isLoggedIn, logout } = useAuth();
   const [rec, setRec] = useState(true);
 
-  const { mockLogin } = useAuth()
+  const { mockLogin } = useAuth();
 
   const handleLogin = () => {
     mockLogin('');
-  }
+  };
 
   useEffect(() => {
     //check if 'User' is empty
-    setRec(!isLoggedIn)
+    setRec(!isLoggedIn);
   });
 
   return (
-    <div> 
+    <div>
       <div>
         <div
           style={{
@@ -40,11 +44,12 @@ export default function MainLandingPage() {
             zIndex: 100,
             flexDirection: 'column',
           }}>
-                 
           <div className="record-header">
-              <FontAwesomeIcon icon={faRightFromBracket} className="close-records"
-                onClick={() => logout()}
-              />
+            <FontAwesomeIcon
+              icon={faRightFromBracket}
+              className="close-records"
+              onClick={() => logout()}
+            />
           </div>
           <h1>
             Punctual
@@ -53,15 +58,12 @@ export default function MainLandingPage() {
             </a>
             y
           </h1>
-          {currentUser && <h3 style={{ paddingBottom: '10%' }}>
-            Welcome,{' '}
-            <i
-              onClick={() => handleLogin()}
-            >
-              {currentUser.email}
-            </i>
-          </h3>
-}
+          {currentUser && (
+            <h3 style={{ paddingBottom: '10%' }}>
+              Welcome,{' '}
+              <i onClick={() => handleLogin()}>{currentUser.displayName}</i>
+            </h3>
+          )}
         </div>
         <div className="card">
           <p>How are you clocking?</p>
