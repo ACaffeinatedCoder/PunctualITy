@@ -50,11 +50,17 @@ function RequestAccess({ panel }) {
         <input
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleLogin();
+          }}
         />
         <input
           type="password"
           placeholder="Password..."
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleLogin();
+          }}
         />
       </div>
 
