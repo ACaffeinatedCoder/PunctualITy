@@ -160,6 +160,8 @@ function Records() {
                 </option>
               ))}
             </select>
+            {/**
+             * 
             <select
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}>
@@ -172,6 +174,11 @@ function Records() {
                 </option>
               ))}
             </select>
+             */}
+            <input
+              type="date"
+              onChange={(e) => setSelectedTime(e.target.value)}
+            />
             <select
               value={selectedUser}
               onChange={(e) => setSelectedUser(e.target.value)}>
@@ -190,7 +197,17 @@ function Records() {
               style={{}}
             />
           </div>
-          <div className="records">{records_mapped}</div>
+          <div className="records">
+  {records_mapped && records_mapped.length > 0 ? (
+    <>
+      {records_mapped}
+    </>
+  ) : (
+    <>
+      <h2>No records found</h2>
+    </>
+  )}
+</div>
         </div>
 
         <div
