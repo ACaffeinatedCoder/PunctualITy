@@ -88,6 +88,11 @@ function ClockIn() {
           className={`scanner-icon ${animate ? 'beat-once' : ''}`}
         />
       </div>
+     { scannedID &&
+      <h2>
+        Your ID: <span style={{ color: '#f16522' }}>{scannedID}</span>
+      </h2>
+      }
       <p className="read-the-docs">
         New student? Remember to register your ID card with your Chairperson!
       </p>
