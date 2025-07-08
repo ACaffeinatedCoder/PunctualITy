@@ -2,6 +2,7 @@ import {
   faCalendarDays,
   faCircleExclamation,
   faCircleXmark,
+  faDownload,
   faMagnifyingGlass,
   faPersonCircleExclamation,
   faPersonCircleQuestion,
@@ -20,6 +21,7 @@ import { db } from '../../config/firebase-config';
 import Events from './Events';
 import NewStudent from './NewStudent';
 import NewFaculty from './NewFaculty';
+import * as XLSX from 'xlsx';
 
 function Records() {
   const [attendance, setAttendance] = useState([]);
@@ -123,6 +125,16 @@ function Records() {
     </div>
   ));
 
+  const downloadRecords = () => {
+    const dlTitle = `PunctualITy-Records_${Date.now()}`;
+    console.log(dlTitle);
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredAttendance);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.writeFile(workbook, `${dlTitle}.xlsx`);
+  };
+
   return (
     <div className="record-overall-container">
       <div className="record-header">
@@ -146,6 +158,11 @@ function Records() {
               placeholder="Student ID..."
               onChange={(e) => setSelectedID(e.target.value)}
             />
+            <FontAwesomeIcon
+              icon={faDownload}
+              className="record-search-icon"
+              onClick={() => downloadRecords()}
+            />
           </div>
           <div className="record-title">
             <select
@@ -160,21 +177,6 @@ function Records() {
                 </option>
               ))}
             </select>
-            {/**
-             * 
-            <select
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}>
-              <option value="" disabled>
-                Select Date
-              </option>
-              {dateDrop.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-             */}
             <input
               type="date"
               onChange={(e) => setSelectedTime(e.target.value)}
@@ -198,16 +200,14 @@ function Records() {
             />
           </div>
           <div className="records">
-  {records_mapped && records_mapped.length > 0 ? (
-    <>
-      {records_mapped}
-    </>
-  ) : (
-    <>
-      <h2>No records found</h2>
-    </>
-  )}
-</div>
+            {records_mapped && records_mapped.length > 0 ? (
+              <>{records_mapped}</>
+            ) : (
+              <>
+                <h2>No records found</h2>
+              </>
+            )}
+          </div>
         </div>
 
         <div
