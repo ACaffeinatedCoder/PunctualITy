@@ -6,25 +6,6 @@ import { useEffect, useState, useRef } from 'react';
 import './AccessCSS.css';
 import { useAuth } from '../AuthContext';
 
-/**
- * -- REVAMP --
- * Turn into a login page
- *  - signInWithEmailAndPassword
- *
- * Track user
- *  - onAuthStateChanged?
- *  - setDoc(doc(db, "Users", user.uid)) upon register
- * {
- *    email, role, displayName
- * }
- *  - const userDoc = await getDoc(doc(db, "Users", user.uid));
- *  - (const userInfo = userDoc.data();
- *
- * Restrict pages per role
- *  - check role of current user and restrict accordingly
- *  - use createContext for a globally available variable
- */
-
 function RequestAccess({ panel }) {
   const [access, setAccess] = useState(true);
   const [email, setEmail] = useState('');
@@ -67,7 +48,7 @@ function RequestAccess({ panel }) {
       <div className="card">
         <FontAwesomeIcon
           icon={faRightToBracket}
-          className={`lock-icon ${access ? 'fade-out' : 'fade-in'}`}
+          className={`lock-icon`}
           onClick={() => handleLogin()}
         />
       </div>

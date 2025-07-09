@@ -1,3 +1,8 @@
+.newstudent-wrapper {
+  height: 100vh;
+  overflow-y: auto;
+}
+
 .newstud-details {
   display: flex;
   flex-direction: column;
@@ -29,4 +34,27 @@
   flex: 1;
   padding: 3px;
   font-size: 1.1vw;
+}
+
+@media screen and (max-width: 768px) {
+  .newstud-details {
+    width: 95%;
+    padding: 1rem 0.75rem;
+  }
+
+  .newstud-details .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .newstud-details h2 {
+    font-size: 4vw;
+    width: 100%;
+  }
+
+  .newstud-details input {
+    width: 100%;
+    font-size: 4vw;
+  }
 }

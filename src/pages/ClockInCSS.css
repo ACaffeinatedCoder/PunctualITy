@@ -5,7 +5,7 @@
 }
 
 .scanner-icon {
-  font-size: 8vw;
+  font-size: clamp(2.5rem, 8vw, 5rem);
   color: #f6941d;
   transition: transform 0.3s ease;
 }
@@ -35,9 +35,9 @@
 
 .close {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
-  font-size: 3vw;
+  top: 1rem;
+  right: 1rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   color: #f6941d;
   transition: opacity 0.3s ease, transform 0.3s ease;
   cursor: pointer;

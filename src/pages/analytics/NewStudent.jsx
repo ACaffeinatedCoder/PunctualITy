@@ -147,7 +147,7 @@ function NewStudent({ newPage }) {
         </h1>
       </div>
 
-      <div className="absence-and-analytics">
+      <div className="events-overall">
         <div className="idlogs-container">
           <h2>
             <span style={{ color: '#f16522' }}>Student</span> Details

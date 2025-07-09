@@ -79,3 +79,30 @@
   color: red;
   font-weight: bold;
 }
+
+@media screen and (max-width: 768px) {
+  .idlogs-container,
+  .anomalogs-container,
+  .anomalogs-title,
+  .anomalogs-item {
+    width: 95%;
+    max-width: 95%;
+  }
+
+  .anomalogs-title h2 {
+    font-size: 1.2rem;
+    letter-spacing: normal;
+  }
+
+  .anomalogs-content {
+    gap: 0.25rem;
+  }
+
+  .anomalogs-content p {
+    font-size: 0.95rem;
+  }
+
+  .anomaly-text {
+    font-size: 1rem;
+  }
+}
