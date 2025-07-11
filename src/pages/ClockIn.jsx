@@ -65,6 +65,18 @@ function ClockIn() {
     }
   };
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
+
   return (
     <div>
       <a href="/">
@@ -74,20 +86,34 @@ function ClockIn() {
         Tap your ID to <span style={{ color: '#f16522' }}>Clock In</span>!
       </h1>
       <div className="card">
-        <input
-          ref={inputRef}
-          type="text"
-          value={scannedID}
-          onChange={(e) => setScannedID(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="scanner-input"
-          autoFocus
-        />
+        {!isMobile ? (
+    <input
+      ref={inputRef}
+      type="text"
+      value={scannedID}
+      onChange={(e) => setScannedID(e.target.value)}
+      onKeyDown={handleKeyDown}
+      className="hidden-desktop-input"
+      autoFocus
+    />
+  ) : (
+    <input
+      ref={inputRef}
+      type="text"
+      value={scannedID}
+      onChange={(e) => setScannedID(e.target.value)}
+      onKeyDown={handleKeyDown}
+      className="mobile-input"
+      placeholder="Enter your ID"
+    />
+  )}
         <FontAwesomeIcon
           icon={faIdBadge}
           className={`scanner-icon ${animate ? 'beat-once' : ''}`}
         />
-      </div>
+      </div><p className="mobile-helper">
+        No RFID scanner? Manually enter your ID above.
+      </p>
      { scannedID &&
       <h2>
         Your ID: <span style={{ color: '#f16522' }}>{scannedID}</span>

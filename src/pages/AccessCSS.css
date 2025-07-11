@@ -57,6 +57,14 @@
   cursor: pointer;
 }
 
+.forgot-pass{
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: underline;
+  font-size: 16px;
+  color: #f6941d;
+  cursor: pointer;
+}
 
 @media (max-width: 768px) {
   .access {
