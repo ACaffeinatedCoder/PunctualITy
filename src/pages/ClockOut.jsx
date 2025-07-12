@@ -33,8 +33,10 @@ function ClockOut() {
 
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter' && scannedID !== '') {
-      let currentTime = new Date();
+      const now = new Date();
+      let currentTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
       e.preventDefault();
+
 
       const dateIn = currentTime.toISOString().split('T')[0];
       const timeIn = currentTime.toTimeString().split(' ')[0];
@@ -75,20 +77,35 @@ function ClockOut() {
         Tap your ID to <span style={{ color: '#f16522' }}>Clock Out</span>!
       </h1>
       <div className="card">
-        <input
-          ref={inputRef}
-          type="text"
-          value={scannedID}
-          onChange={(e) => setScannedID(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="scanner-input"
-          autoFocus
-        />
+        {!isMobile ? (
+    <input
+      ref={inputRef}
+      type="text"
+      value={scannedID}
+      onChange={(e) => setScannedID(e.target.value)}
+      onKeyDown={handleKeyDown}
+      className="hidden-desktop-input"
+      autoFocus
+    />
+  ) : (
+    <input
+      ref={inputRef}
+      type="text"
+      value={scannedID}
+      onChange={(e) => setScannedID(e.target.value)}
+      onKeyDown={handleKeyDown}
+      className="mobile-input"
+      placeholder="Enter your ID"
+    />
+  )}
         <FontAwesomeIcon
           icon={faIdBadge}
           className={`scanner-icon ${animate ? 'beat-once' : ''}`}
         />
       </div>
+<p className="mobile-helper">
+        No RFID scanner? Manually enter your ID above.
+      </p>
       { scannedID &&
         <h2>
           Your ID: <span style={{ color: '#f16522' }}>{scannedID}</span>

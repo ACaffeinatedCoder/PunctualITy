@@ -32,7 +32,8 @@ function ClockIn() {
 
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter' && scannedID !== '') {
-      let currentTime = new Date();
+      const now = new Date();
+      let currentTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
       e.preventDefault();
 
       const dateIn = currentTime.toISOString().split('T')[0];
