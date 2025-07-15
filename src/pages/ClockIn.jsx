@@ -11,7 +11,7 @@ function ClockIn() {
   const [animate, setAnimate] = useState(false);
   const inputRef = useRef(null);
 
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const focusInput = () => {
@@ -33,7 +33,9 @@ function ClockIn() {
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter' && scannedID !== '') {
       const now = new Date();
-      let currentTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
+      let currentTime = new Date(
+        now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' })
+      );
       e.preventDefault();
 
       const dateIn = currentTime.toISOString().split('T')[0];
@@ -68,15 +70,14 @@ function ClockIn() {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 768);
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
-
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div>
@@ -88,38 +89,39 @@ useEffect(() => {
       </h1>
       <div className="card">
         {!isMobile ? (
-    <input
-      ref={inputRef}
-      type="text"
-      value={scannedID}
-      onChange={(e) => setScannedID(e.target.value)}
-      onKeyDown={handleKeyDown}
-      className="hidden-desktop-input"
-      autoFocus
-    />
-  ) : (
-    <input
-      ref={inputRef}
-      type="text"
-      value={scannedID}
-      onChange={(e) => setScannedID(e.target.value)}
-      onKeyDown={handleKeyDown}
-      className="mobile-input"
-      placeholder="Enter your ID"
-    />
-  )}
+          <input
+            ref={inputRef}
+            type="text"
+            value={scannedID}
+            onChange={(e) => setScannedID(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="hidden-desktop-input"
+            autoFocus
+          />
+        ) : (
+          <input
+            ref={inputRef}
+            type="text"
+            value={scannedID}
+            onChange={(e) => setScannedID(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="mobile-input"
+            placeholder="Enter your ID"
+          />
+        )}
         <FontAwesomeIcon
           icon={faIdBadge}
           className={`scanner-icon ${animate ? 'beat-once' : ''}`}
         />
-      </div><p className="mobile-helper">
+      </div>
+      <p className="mobile-helper">
         No RFID scanner? Manually enter your ID above.
       </p>
-     { scannedID &&
-      <h2>
-        Your ID: <span style={{ color: '#f16522' }}>{scannedID}</span>
-      </h2>
-      }
+      {scannedID && (
+        <h2>
+          Your ID: <span style={{ color: '#f16522' }}>{scannedID}</span>
+        </h2>
+      )}
       <p className="read-the-docs">
         New student? Remember to register your ID card with your Chairperson!
       </p>
