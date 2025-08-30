@@ -53,7 +53,7 @@ export default function MainLandingPage() {
           </div>
           <h1>
             Punctual
-            <a href="/records">
+            <a href="/login">
               <span style={{ color: '#f16522' }}>IT</span>
             </a>
             y
@@ -90,23 +90,6 @@ export default function MainLandingPage() {
         This website was developed by Mr. Francisco for the Siena College of
         Taytay's College of Engineering and Information Technology Department.
       </p>
-      {rec && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0,0,0,0.95)',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <RequestAccess panel={setRec} />
-        </div>
-      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true); // catcher for auth checking
-
+/**
   const login = async (email, password) => {
     console.log('Attempting login...');
     if (email !== '' && password !== '') {
@@ -35,6 +35,42 @@ export function AuthProvider({ children }) {
         return { success: true };
       } catch (error) {
         console.error('Login failed');
+        return { success: false, message: error.message };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Incomplete credentials. Please try again.',
+      };
+    }
+  };
+**/
+
+  const login = async (email, password) => {
+    console.log('Attempting login...');
+    if (email !== '' && password !== '') {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Fetch Firestore role immediately
+        const userDocRef = doc(db, 'User-Information', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          setCurrentUser({
+            uid: user.uid,
+            email: user.email,
+            ...userDocSnap.data(), // includes role & displayName
+          });
+        } else {
+          setCurrentUser(user); // fallback if no Firestore data
+        }
+
+        console.log('Log in successful.');
+        return { success: true };
+      } catch (error) {
+        console.error('Login failed', error);
         return { success: false, message: error.message };
       }
     } else {

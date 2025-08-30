@@ -32,16 +32,30 @@ function ClockIn() {
 
   const handleKeyDown = async (e) => {
     if (e.key === 'Enter' && scannedID !== '') {
-      const now = new Date();
-      let currentTime = new Date(
-        now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' })
-      );
       e.preventDefault();
 
-      const dateIn = currentTime.toISOString().split('T')[0];
-      const timeIn = currentTime.toTimeString().split(' ')[0];
+    const now = new Date();
 
-      const logID = `${scannedID}_${Date.now()}`;
+    // Format date and time directly in GMT+8
+    const formatterDate = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Singapore',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    const formatterTime = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Singapore',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+
+    const dateIn = formatterDate.format(now); // YYYY-MM-DD format (en-CA ensures this)
+    const timeIn = formatterTime.format(now); // HH:mm:ss in Singapore time
+
+    const logID = `${scannedID}_${Date.now()}`;
 
       setAnimate(true);
 

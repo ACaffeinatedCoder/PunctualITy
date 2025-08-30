@@ -22,8 +22,11 @@ import Events from './Events';
 import NewStudent from './NewStudent';
 import NewFaculty from './NewFaculty';
 import * as XLSX from 'xlsx';
+import RequestAccess from '../RequestAccess';
 
 function Records() {
+  const [recordees, setRecordees] = useState([])
+  const [rawAtt, setRawAtt] = useState ([])
   const [attendance, setAttendance] = useState([]);
   const getRecords = async () => {
     const recordCollection = collection(db, 'Attendance-Records');
@@ -35,15 +38,45 @@ function Records() {
         ...rec.data(),
         id: rec.id,
       }));
-      setAttendance(records);
+      setRawAtt(records);
+    } catch (error) {
+      console.log('Error', err);
+    }
+  };
+
+  const getAttendees = async () => {
+    const recordCollection = collection(db, 'Student-Information');
+    const q = query(recordCollection);
+
+    try {
+      const recordsRaw = await getDocs(q);
+      const records = recordsRaw.docs.map((rec) => ({
+        ...rec.data(),
+        id: rec.id,
+      }));
+      setRecordees(records);
     } catch (error) {
       console.log('Error', err);
     }
   };
 
   useEffect(() => {
+    getAttendees()
     getRecords();
   }, []);
+
+  useEffect(() => {
+    if (rawAtt.length > 0 && recordees.length > 0) {
+    const mergedArray = rawAtt.map((itemA) => {
+       const matched = recordees.find((itemB) => itemB.id === itemA.studentId);
+       return {
+         ...itemA,
+         name: matched ? matched.firstname : "Unknown",
+       };
+     });
+     setAttendance(mergedArray);
+   }
+  }, [rawAtt, recordees])
 
   const [selectedID, setSelectedID] = useState('');
   const [selectedCateg, setSelectedCateg] = useState('');
@@ -60,6 +93,8 @@ function Records() {
   const [eventsPage, setEvents] = useState(false);
   const [facultyPage, setFaculty] = useState(false);
 
+  const [rec, setRec] = useState(true);
+
   useEffect(() => {
     const extracted = [
       ...new Set(
@@ -75,7 +110,7 @@ function Records() {
     const extracted = [
       ...new Set(
         attendance
-          .map((item) => item.user)
+          .map((item) => item.name)
           .filter((user) => user && user.trim() !== '')
       ),
     ];
@@ -89,7 +124,7 @@ function Records() {
         ? rec.category === selectedCateg
         : true;
       const matchID = selectedID ? rec.studentId === selectedID : true;
-      const matchUser = selectedUser ? rec.user === selectedUser : true;
+      const matchUser = selectedUser ? rec.name === selectedUser : true;
       const matchDate = selectedTime ? rec.date === selectedTime : true;
 
       return matchCategory && matchID && matchUser && matchDate;
@@ -120,7 +155,7 @@ function Records() {
         <p>{rec.time}</p>
       </div>
       <p>
-        <b>{rec.user}</b>
+        <b>{rec.name}</b>
       </p>
     </div>
   ));
@@ -137,229 +172,237 @@ function Records() {
 
   return (
     <div className="record-overall-container">
-      <div className="record-header">
-        <a href="/">
-          <FontAwesomeIcon icon={faCircleXmark} className="close-records" />
-        </a>
-        <h1>
-          <span style={{ color: '#f16522' }}>Attendance</span> Records
-        </h1>
-      </div>
+      <div>
+        <div className="record-header">
+          <a href="/">
+            <FontAwesomeIcon icon={faCircleXmark} className="close-records" />
+          </a>
+          <h1>
+            <span style={{ color: '#f16522' }}>Attendance</span> Records
+          </h1>
+        </div>
 
-      <div className="record-and-analytics">
-        <div className="record-container">
-          <div className="record-search">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="record-search-icon"
-            />
-            <input
-              value={selectedID}
-              placeholder="Student ID..."
-              onChange={(e) => setSelectedID(e.target.value)}
-            />
-            <FontAwesomeIcon
-              icon={faDownload}
-              className="record-search-icon"
-              onClick={() => downloadRecords()}
-            />
-          </div>
-          <div className="record-title">
-            <select
-              value={selectedCateg}
-              onChange={(e) => setSelectedCateg(e.target.value)}>
-              <option value="" disabled>
-                Select Category
-              </option>
-              {categDrop.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
+        <div className="record-and-analytics">
+          <div className="record-container">
+            <div className="record-search">
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="record-search-icon"
+              />
+              <input
+                value={selectedID}
+                placeholder="Student ID..."
+                onChange={(e) => setSelectedID(e.target.value)}
+              />
+              <FontAwesomeIcon
+                icon={faDownload}
+                className="record-search-icon"
+                onClick={() => downloadRecords()}
+              />
+            </div>
+            <div className="record-title">
+              <select
+                value={selectedCateg}
+                onChange={(e) => setSelectedCateg(e.target.value)}>
+                <option value="" disabled>
+                  Select Category
                 </option>
-              ))}
-            </select>
-            <input
-              type="date"
-              onChange={(e) => setSelectedTime(e.target.value)}
-            />
-            <select
-              value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}>
-              <option value="" disabled>
-                Select User
-              </option>
-              {facDrop.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
+                {categDrop.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="date"
+                onChange={(e) => setSelectedTime(e.target.value)}
+              />
+              <select
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}>
+                <option value="" disabled>
+                  Select User
                 </option>
-              ))}
-            </select>
-            <FontAwesomeIcon
-              icon={faRotate}
-              onClick={clearFilters}
-              style={{}}
-            />
+                {facDrop.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              <FontAwesomeIcon
+                icon={faRotate}
+                onClick={clearFilters}
+                style={{}}
+              />
+            </div>
+            <div className="records">
+              {records_mapped && records_mapped.length > 0 ? (
+                <>{records_mapped}</>
+              ) : (
+                <>
+                  <h2>No records found</h2>
+                </>
+              )}
+            </div>
           </div>
-          <div className="records">
-            {records_mapped && records_mapped.length > 0 ? (
-              <>{records_mapped}</>
-            ) : (
-              <>
-                <h2>No records found</h2>
-              </>
-            )}
+
+          <div
+            style={{
+              width: '20px',
+              height: '100%',
+              backgroundColor: '#242424',
+            }}></div>
+
+          <div className="record-container">
+            <div className="analytics-title">
+              <h2>ANALYTICS</h2>
+            </div>
+            <div className="records">
+              <div className="analytics-subcontainer">
+                <div
+                  className="analytics-item"
+                  onClick={() => setAbsent(true)}
+                  style={{ cursor: 'pointer' }}>
+                  <h2>ABSENCES</h2>
+                  <FontAwesomeIcon
+                    icon={faUserXmark}
+                    className="analytics-icon"
+                  />
+                </div>
+                <div
+                  className="analytics-item"
+                  onClick={() => setStudent(true)}
+                  style={{ cursor: 'pointer' }}>
+                  <h2>ADD STUDENT</h2>
+                  <FontAwesomeIcon
+                    icon={faUserPlus}
+                    className="analytics-icon"
+                  />
+                </div>
+              </div>
+              <div className="analytics-subcontainer">
+                <div
+                  className="analytics-item"
+                  onClick={() => setUnusual(true)}
+                  style={{ cursor: 'pointer' }}>
+                  <h2>UNUSUAL LOGS</h2>
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    className="analytics-icon"
+                  />
+                </div>
+                <div
+                  className="analytics-item"
+                  onClick={() => setEvents(true)}
+                  style={{ cursor: 'pointer' }}>
+                  <h2>EVENTS</h2>
+                  <FontAwesomeIcon
+                    icon={faCalendarDays}
+                    className="analytics-icon"
+                  />
+                </div>
+              </div>
+              <div className="analytics-subcontainer">
+                <div
+                  className="analytics-item"
+                  onClick={() => setFaculty(true)}
+                  style={{ cursor: 'pointer' }}>
+                  <h2>ADD FACULTY</h2>
+                  <FontAwesomeIcon
+                    icon={faUserTie}
+                    className="analytics-icon"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div
-          style={{
-            width: '20px',
-            height: '100%',
-            backgroundColor: '#242424',
-          }}></div>
-
-        <div className="record-container">
-          <div className="analytics-title">
-            <h2>ANALYTICS</h2>
+        {absentPage && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#444',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Absences absent={setAbsent} />
           </div>
-          <div className="records">
-            <div className="analytics-subcontainer">
-              <div
-                className="analytics-item"
-                onClick={() => setAbsent(true)}
-                style={{ cursor: 'pointer' }}>
-                <h2>ABSENCES</h2>
-                <FontAwesomeIcon
-                  icon={faUserXmark}
-                  className="analytics-icon"
-                />
-              </div>
-              <div
-                className="analytics-item"
-                onClick={() => setStudent(true)}
-                style={{ cursor: 'pointer' }}>
-                <h2>ADD STUDENT</h2>
-                <FontAwesomeIcon icon={faUserPlus} className="analytics-icon" />
-              </div>
-            </div>
-            <div className="analytics-subcontainer">
-              <div
-                className="analytics-item"
-                onClick={() => setUnusual(true)}
-                style={{ cursor: 'pointer' }}>
-                <h2>UNUSUAL LOGS</h2>
-                <FontAwesomeIcon
-                  icon={faCircleExclamation}
-                  className="analytics-icon"
-                />
-              </div>
-              <div
-                className="analytics-item"
-                onClick={() => setEvents(true)}
-                style={{ cursor: 'pointer' }}>
-                <h2>EVENTS</h2>
-                <FontAwesomeIcon
-                  icon={faCalendarDays}
-                  className="analytics-icon"
-                />
-              </div>
-            </div>
-            <div className="analytics-subcontainer">
-              <div
-                className="analytics-item"
-                onClick={() => setFaculty(true)}
-                style={{ cursor: 'pointer' }}>
-                <h2>ADD FACULTY</h2>
-                <FontAwesomeIcon icon={faUserTie} className="analytics-icon" />
-              </div>
-            </div>
+        )}
+        {newStudentPage && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#444',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <NewStudent newPage={setStudent} />
           </div>
-        </div>
+        )}
+        {unusualPage && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#444',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <AnomaLogs suspicious={setUnusual} />
+          </div>
+        )}
+        {eventsPage && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#444',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Events events={setEvents} />
+          </div>
+        )}
+        {facultyPage && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#444',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <NewFaculty faculty={setFaculty} />
+          </div>
+        )}
       </div>
-      {absentPage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#444',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Absences absent={setAbsent} />
-        </div>
-      )}
-      {newStudentPage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#444',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <NewStudent newPage={setStudent} />
-        </div>
-      )}
-      {unusualPage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#444',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <AnomaLogs suspicious={setUnusual} />
-        </div>
-      )}
-      {eventsPage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#444',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Events events={setEvents} />
-        </div>
-      )}
-      {facultyPage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#444',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <NewFaculty faculty={setFaculty} />
-        </div>
-      )}
     </div>
   );
 }
